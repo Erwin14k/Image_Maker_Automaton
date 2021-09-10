@@ -15,7 +15,7 @@ class Error_DAO:
             print(error.description,error.type,str(error.line),str(error.column))
 
     def errors_html_report(self):
-        f = open('ERROS.html','w')
+        f = open('Reportes/ERRORS.html','w')
         error_html ="""<html>
         <head></head>
         <body>

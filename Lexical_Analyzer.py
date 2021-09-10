@@ -12,8 +12,13 @@ class Lexical_Analyzer:
     def __init__(self):
         self.tokens_list = []
         self.errors_list = []
-        
-    def analyze2(self, original_text):
+
+
+
+
+#========================================================================================================
+#función para analizar el texto
+    def analyze_file(self, original_text):
         self.tokens_list = []
         self.errors_list = []
 
@@ -21,6 +26,7 @@ class Lexical_Analyzer:
         line = 1
         column = 1
         buffer = ''
+        buffer_temp=""
         sentinel = '$'
         state = 0
         original_text += sentinel
@@ -88,6 +94,8 @@ class Lexical_Analyzer:
                 elif c == '#':
                     buffer += c
                     column += 1
+                    token_handler.new_token(buffer, 'hashtag', line, column)
+                    buffer=""
                     state = 5
                 elif c.isdigit():
                     buffer += c
@@ -95,6 +103,7 @@ class Lexical_Analyzer:
                     state = 2
                 elif c=="@":
                     buffer += c
+                    buffer_temp+=c
                     column += 1
                     state = 11
                 elif c == '\n':
@@ -139,8 +148,11 @@ class Lexical_Analyzer:
                         token_handler.new_token(buffer, 'FILAS', line, column)
                     elif buffer == 'CELDAS':
                         token_handler.new_token(buffer, 'CELDAS', line, column)
+                    elif buffer=="FALSE" or buffer=="TRUE":
+                        token_handler.new_token(buffer, 'boolean_value', line, column)
                     else:
-                        token_handler.new_token(buffer, 'string_value', line, column)
+                        token_handler.new_token(buffer, 'FILTROS', line, column)
+
                     buffer = ''
                     i -= 1
                     state = 0
@@ -296,6 +308,7 @@ class Lexical_Analyzer:
             elif state==11:
                 if c=="@":
                     column+=1
+                    buffer_temp+=c
                     buffer=""
                     state=12
                 else:
@@ -314,6 +327,7 @@ class Lexical_Analyzer:
             elif state==12:
                 if c=="@":
                     column+=1
+                    buffer_temp+=c
                     buffer=""
                     state=13
                 else:
@@ -332,7 +346,10 @@ class Lexical_Analyzer:
             elif state==13:
                 if c=="@":
                     column+=1
+                    buffer_temp+=c
+                    token_handler.new_token(buffer_temp, 'SEPARATOR', line, column)
                     buffer=""
+                    buffer_temp=""
                     state=0
                 else:
                     buffer += c
@@ -342,6 +359,10 @@ class Lexical_Analyzer:
                     column += 1
             #=======================================================================================
             i += 1
+#========================================================================================================
+
+
+
 
     def print_tokens(self):
         token_handler.print_token()
