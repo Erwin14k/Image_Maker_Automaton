@@ -86,11 +86,17 @@ class Image_DAO:
         for image in self.images_list:
             if image.name==name:
                 return image.filters
+    
+    def dimensions_by_name(self,name):
+        for image in self.images_list:
+            if image.name==name:
+                return image.width,"X",image.height
+
 
 
     def images_report(self,name,matrix,rows,cols,width,height,filters):
         mirrory=[]
-        mirrory+=reversed(matrix)
+        #mirrory+=reversed(matrix)
         mirrorx=[]
         doublemirror=[]
         #Para rotar 90 grados
@@ -99,12 +105,13 @@ class Image_DAO:
             for n in range(len(matrix)):
                 dm[m].append(matrix[len(matrix)-1-n][m])'''
         #MIRROR Y
-        '''dm += list(mirrory[::-1])
-            dm.extend(mirrory[1:])'''
+        mirrory += list(matrix[::-1])
+        mirrory.extend(matrix[1:])
         for j in range(len(matrix)):
             fila=matrix[j][::-1]
             mirrorx.append(fila)
-        doublemirror+=reversed(mirrorx)
+        doublemirror+=list(mirrorx[::-1])
+        doublemirror.extend(mirrorx[1:])
         f = open("ImagesReports/"+name+".html",'w')
         images_html ='''<html>
         <head></head>

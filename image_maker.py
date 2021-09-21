@@ -1,7 +1,5 @@
 import os
-from typing import MappingView
 from Token_DAO import Token_DAO
-from os import system
 from tkinter import *
 from tkinter.ttk import Combobox
 from Lexical_Analyzer import Lexical_Analyzer
@@ -121,6 +119,7 @@ image_frame.config(cursor="hand2")
 img=PhotoImage(file="")
 image_label=Label(image_frame,bg="red")
 image_label.grid(row=2,column=2)
+size_label=Label(bg="gold",text="Tamaño de la imagen :",font=("Comic Sans MS",30))
 
 
 
@@ -141,6 +140,7 @@ def master_mind_window():
     filter_frame.grid(row=1,column=0)
     division_frame.grid(row=1,column=1)
     image_frame.grid(row=1,column=2)
+    size_label.grid(row=0,column=2)
 #Con este botón inicializamos esta función
 principal_Button.config(command=master_mind_window)
 #============================================================================================================    
@@ -186,6 +186,7 @@ upload_Button.config(command=upload_file)
 
 #============================================================================================================
 def image_attributes(data):
+    #print(data)
     j=0
     buffer=""
     name2=""
@@ -253,6 +254,11 @@ def image_attributes(data):
                         buffer=""
                         state=6
                     elif buffer=="FILTROS":
+                        print("filtros",name2)
+                        buffer=""
+                        state=7
+                    elif buffer=="FILTROS=":
+                        print("filtros",name2)
                         buffer=""
                         state=7
                     else:
@@ -303,9 +309,11 @@ def image_attributes(data):
                     state=0
             #===============================================================================
             elif state==7:
-                if c==" "  or c=="=" or re.search('[A-Z]', c) or c==",":
+                if c==" "  or c=="=" or re.search('[A-Z]', c) or c=="," or c=="\t":
                     buffer+=c
+                    print(c)
                 else:
+                    print(buffer,"=0000000000000000000000000000000000000000000000000000000000")
                     filters2=buffer
                     buffer=""
                     state=0
@@ -318,7 +326,7 @@ def image_attributes(data):
                     buffer=""
                     state=0
             #===============================================================================        
-    image_dao_handler.print_image()
+    #image_dao_handler.print_image()
     print("")
 
 #============================================================================================================
@@ -330,6 +338,7 @@ def image_attributes(data):
 def images_generator():
     global temp_text,images_counter,options_list,images_data,images_combobox,image_selected_button
     counter=0
+    temp_text.replace("\t","")
     images_counter=(temp_text.count("@@@@"))+1
     for x in range(images_counter):
         if temp_text.count("@@@@")>=1:
@@ -379,12 +388,15 @@ analyze_Button.config(command=analyze_file)
 #============================================================================================================
 #Función para recolectar información de la imagen solicitada
 def search_information():
-    global images_combobox,image_selected_button,current_image
+    global images_combobox,image_selected_button,current_image,size_label
+    temp_dimensions=""
     if images_combobox.get()!="":
         current_image=images_combobox.get()
+        temp_dimensions=image_dao_handler.dimensions_by_name(current_image)
         image_dao_handler.validate_image(current_image)
         messagebox.showinfo(title="Image Maker V1.0", message="La información de la imagen: "+images_combobox.get()
         +"\nHa sido procesada!!\nPuedes continuar seleccionando los filtros!!")
+        size_label.config(text=temp_dimensions)
 
     else:
         messagebox.showerror(title="Image Maker V1.0", message="No has seleccionado ninguna imagen!!")

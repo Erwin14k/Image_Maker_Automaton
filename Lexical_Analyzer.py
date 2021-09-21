@@ -95,7 +95,6 @@ class Lexical_Analyzer:
                     buffer += c
                     column += 1
                     token_handler.new_token(buffer, 'hashtag', line, column)
-                    buffer=""
                     state = 5
                 elif c.isdigit():
                     buffer += c
@@ -150,8 +149,11 @@ class Lexical_Analyzer:
                         token_handler.new_token(buffer, 'CELDAS', line, column)
                     elif buffer=="FALSE" or buffer=="TRUE":
                         token_handler.new_token(buffer, 'boolean_value', line, column)
-                    else:
+                    elif buffer=="MIRRORX" or buffer=="MIRRORY" or buffer=="DOUBLEMIRROR" or buffer=="FILTROS":
                         token_handler.new_token(buffer, 'FILTROS', line, column)
+                    else:
+                        error_handler.new_error('Palabra ' + "'"+buffer +"'"+ ' no reconocido en el lenguaje.'
+                    , 'Léxico', line, column)
 
                     buffer = ''
                     i -= 1
@@ -180,12 +182,14 @@ class Lexical_Analyzer:
             #=======================================================================================
             #Estado 4, viene de recibir " en el estado 0
             elif state==4:
-                if re.search('[a-z]', c):
+                if re.search('[a-z]', c) or re.search('[A-Z]', c):
                     buffer += c
-                    buffer = ''
                     column += 1
                 elif c=='"':
+                    token_handler.new_token(buffer, 'string', line, column)
+                    buffer=''
                     buffer += c
+                    token_handler.new_token(buffer, 'quotation_mark', line, column)
                     buffer = ''
                     column += 1
                     state=0
@@ -198,8 +202,8 @@ class Lexical_Analyzer:
             #Estado 5, viene de recibir # en el estado 0
             elif state==5:
                 if re.search('[a-z]', c) or c.isdigit() or re.search('[A-Z]', c):
+                    buffer += c
                     column+=1
-                    buffer=""
                     state=6
                 else:
                     buffer += c
@@ -216,8 +220,8 @@ class Lexical_Analyzer:
             #Estado 6, viene de recibir Letra|número en el estado 5
             elif state==6:
                 if re.search('[a-z]', c) or c.isdigit() or re.search('[A-Z]', c):
+                    buffer += c
                     column+=1
-                    buffer=""
                     state=7
                 else:
                     buffer += c
@@ -234,8 +238,8 @@ class Lexical_Analyzer:
             #Estado 7, viene de recibir Letra|número en el estado 6
             elif state==7:
                 if re.search('[a-z]', c) or c.isdigit() or re.search('[A-Z]', c):
+                    buffer += c
                     column+=1
-                    buffer=""
                     state=8
                 else:
                     buffer += c
@@ -252,8 +256,8 @@ class Lexical_Analyzer:
             #Estado 8, viene de recibir Letra|número en el estado 7
             elif state==8:
                 if re.search('[a-z]', c) or c.isdigit() or re.search('[A-Z]', c):
+                    buffer += c
                     column+=1
-                    buffer=""
                     state=9
                 else:
                     buffer += c
@@ -270,8 +274,8 @@ class Lexical_Analyzer:
             #Estado 9, viene de recibir Letra|número en el estado 8
             elif state==9:
                 if re.search('[a-z]', c) or c.isdigit() or re.search('[A-Z]', c):
+                    buffer += c
                     column+=1
-                    buffer=""
                     state=10
                 else:
                     buffer += c
@@ -288,7 +292,9 @@ class Lexical_Analyzer:
             #Estado 10, viene de recibir Letra|número en el estado 9
             elif state==10:
                 if re.search('[a-z]', c) or c.isdigit() or re.search('[A-Z]', c):
+                    buffer += c
                     column+=1
+                    token_handler.new_token(buffer,"color",line,column)
                     buffer=""
                     state=0
                 else:

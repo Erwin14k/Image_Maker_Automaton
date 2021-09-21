@@ -52,8 +52,7 @@ class Token_DAO:
                 <td bgcolor= "#39BBC4">"""+str(token.line)+"""</td>
                 <td bgcolor= "#39BBC4">"""+str(token.column)+"""</td>
                 </tr>"""
-        for token in self.tokens_list:
-            if token.type == 'open_key' or token.type == 'closed_key' or token.type == 'two_points' or token.type == 'semicolon' or token.type == 'comma'or token.type == 'equals'or token.type == 'quotation_mark' or token.type=='open_square_bracket'or token.type=='closed_square_bracket' or token.type=='hashtag':
+            elif token.type == 'open_key' or token.type == 'closed_key' or token.type == 'two_points' or token.type == 'semicolon' or token.type == 'comma'or token.type == 'equals'or token.type == 'quotation_mark' or token.type=='open_square_bracket'or token.type=='closed_square_bracket' or token.type=='hashtag':
                 token_html+="""
                 <tr>
                 <td bgcolor= "#1DEA38">"""+token.type+"""</td>
@@ -61,8 +60,7 @@ class Token_DAO:
                 <td bgcolor= "#1DEA38">"""+str(token.line)+"""</td>
                 <td bgcolor= "#1DEA38">"""+str(token.column)+"""</td>
                 </tr>"""
-        for token in self.tokens_list:
-            if token.type == 'FILTROS':
+            elif token.type == 'FILTROS':
                 token_html+="""
                 <tr>
                 <td bgcolor= "#A276B6">"""+token.type+"""</td>
@@ -70,8 +68,7 @@ class Token_DAO:
                 <td bgcolor= "#A276B6">"""+str(token.line)+"""</td>
                 <td bgcolor= "#A276B6">"""+str(token.column)+"""</td>
                 </tr>"""
-        for token in self.tokens_list:
-            if token.type == 'int_value':
+            elif token.type == 'int_value':
                 token_html+="""
                 <tr>
                 <td bgcolor= "#E9AC17">"""+token.type+"""</td>
@@ -79,8 +76,7 @@ class Token_DAO:
                 <td bgcolor= "#E9AC17">"""+str(token.line)+"""</td>
                 <td bgcolor= "#E9AC17">"""+str(token.column)+"""</td>
                 </tr>"""
-        for token in self.tokens_list:
-            if token.type == 'boolean_value':
+            elif token.type == 'boolean_value':
                 token_html+="""
                 <tr>
                 <td bgcolor= "#5883DB">"""+token.type+"""</td>
@@ -88,14 +84,29 @@ class Token_DAO:
                 <td bgcolor= "#5883DB">"""+str(token.line)+"""</td>
                 <td bgcolor= "#5883DB">"""+str(token.column)+"""</td>
                 </tr>"""
-        for token in self.tokens_list:
-            if token.type == 'SEPARATOR':
+            elif token.type == 'SEPARATOR':
                 token_html+="""
                 <tr>
                 <td bgcolor= "#BDEC0D">"""+token.type+"""</td>
                 <td bgcolor= "#BDEC0D">"""+token.lexem+"""</td>
                 <td bgcolor= "#BDEC0D">"""+str(token.line)+"""</td>
                 <td bgcolor= "#BDEC0D">"""+str(token.column)+"""</td>
+                </tr>"""
+            elif token.type == 'color':
+                token_html+="""
+                <tr>
+                <td bgcolor= "#84C7EA">"""+token.type+"""</td>
+                <td bgcolor= "#84C7EA">"""+token.lexem+"""</td>
+                <td bgcolor= "#84C7EA">"""+str(token.line)+"""</td>
+                <td bgcolor= "#84C7EA">"""+str(token.column)+"""</td>
+                </tr>"""
+            elif token.type == 'string':
+                token_html+="""
+                <tr>
+                <td bgcolor= "#C784EA">"""+token.type+"""</td>
+                <td bgcolor= "#C784EA">"""+token.lexem+"""</td>
+                <td bgcolor= "#C784EA">"""+str(token.line)+"""</td>
+                <td bgcolor= "#C784EA">"""+str(token.column)+"""</td>
                 </tr>"""
         token_html+="""
         </table>
